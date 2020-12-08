@@ -1,10 +1,15 @@
-#include<stdio.h>
-#include<stdlib.h>
-#include<sys/types.h>
-#include<sys/shm.h>
-#include<sys/msg.h>
-#include<signal.h>
-#include<unistd.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <signal.h>
+#include <sys/types.h>
+#include <sys/shm.h>
+#include <sys/msg.h>
+#include <string.h>
+#include <math.h>
+#include <ctype.h>
+#include <sys/sem.h>
+#include <sys/ipc.h>
 
 #define MY_MSG_SIZE 1000
 
@@ -39,7 +44,7 @@ int main(int argc, char * argv[])
 
 	struct shmid_ds buf;
 
-	signal(SIGTSTP, printRecords);
+	signal(SIGTSTP, sgnhandle);
 	signal(SIGINT, sgnhandle);
 	
 
