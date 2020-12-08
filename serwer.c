@@ -30,16 +30,18 @@ void printRecords(int signal)
 int main(int argc, char * argv[]) 
 {
 
-    if (argc != 2)
+    /*if (argc != 2)
     {
         perror("Nieprawidlowa ilosc argumentow");
         return 1;
     }
+	*/
 
 	struct shmid_ds buf;
 
-	signal(SIGINT, sgnhandle);
 	signal(SIGTSTP, printRecords);
+	signal(SIGINT, sgnhandle);
+	
 
 	printf("[Serwer]: tworze klucz...");
     if( (shmkey = ftok(argv[1], 1)) == -1) {
