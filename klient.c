@@ -21,37 +21,43 @@ int main(int argc, char * argv[]) {
         return 1;
     }
 
-	printf("[Klient]: tworze klucz...");
-	if( (shmkey = ftok(argv[1], 1)) == -1) {
+	printf("[Klient]: Tworzenie klucza na bazie podanego pliku \"%s\"", argv[1]);
+
+	if( (shmkey = ftok(argv[1], 1)) == -1)
+	{
 		printf("Blad tworzenia klucza!\n");
 		exit(1);
-	} 
+	}
+
 	printf(" OK (klucz:  %d)\n", shmkey);
 
 	printf("[Klient]: otwieram segment pamieci wspolnej...");
-	if( (shmid = shmget(shmkey, 0, 0)) == -1 ) {
+
+	if( (shmid = shmget(shmkey, 0, 0)) == -1 )
+	{
 		printf(" blad shmget\n");
 		exit(1);
 	}
+
 	printf(" OK (id: %d)\n", shmid);
 	
 	printf("[Klient]: dolaczam pamiec wspolna...");
+
 	shared_data = (char *) shmat(shmid, (void *)0, 0);
-	if(shared_data == (char *)-1) {
+
+	if(shared_data == (char *)-1)
+	{
 		printf(" blad shmat!\n");
 		exit(1);
 	}
+	
 	printf(" OK (adres: %lX)\n", (long int)shared_data);
-
-	printf("[Klient]: biezaca zawartosc pamieci wspolnej: ");
-	if(shared_data[0] == '\0') printf("PUSTO\n");
-	else printf("\n%s\n", shared_data);
 
 	printf("[Klient]: podaj komunikat ktory chcesz wpisac do pamieci wspolnej:\n");
 	fgets(buf, MY_MSG_SIZE, stdin);
 	
 	/* wpisywanie do pamieci dzielonej */
-	buf[strlen(buf)-1] = '\0'; /* techniczne: usuwam koniec linii */
+	buf[strlen(buf) - 1] = '\0'; /* techniczne: usuwam koniec linii */
 	strcpy(shared_data, buf);
 	
 	printf("[Klient]: wpisalem komunikat do pamieci wspolnej\n");
