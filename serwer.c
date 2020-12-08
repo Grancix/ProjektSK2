@@ -24,7 +24,7 @@ void sgnhandle(int signal)
 
 void printRecords(int signal)
 {
-	printf("bajojajo");
+	printf("\nbajojajo");
 }
 
 int main(int argc, char * argv[]) 
