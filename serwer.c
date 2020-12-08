@@ -6,14 +6,15 @@
 #include<signal.h>
 #include<unistd.h>
 
-#define MY_MSG_SIZE 64
+#define MY_MSG_SIZE 1000
 
 key_t shmkey;
 int   shmid;
 char  *shared_data;
 
 
-void sgnhandle(int signal) {
+void sgnhandle(int signal)
+{
 	printf("\n[Serwer]: dostalem SIGINT => koncze i sprzatam...");
 	printf(" (odlaczenie: %s, usuniecie: %s)\n", 
 			(shmdt(shared_data) == 0)        ?"OK":"blad shmdt",
@@ -21,8 +22,13 @@ void sgnhandle(int signal) {
 	exit(0);
 }
 
+void printRecords(int signal)
+{
+	printf("bajojajo");
+}
 
-int main(int argc, char * argv[]) {
+int main(int argc, char * argv[]) 
+{
 
     if (argc != 2)
     {
@@ -33,6 +39,7 @@ int main(int argc, char * argv[]) {
 	struct shmid_ds buf;
 
 	signal(SIGINT, sgnhandle);
+	signal(SIGTSTP, printRecords);
 
 	printf("[Serwer]: tworze klucz...");
     if( (shmkey = ftok(argv[1], 1)) == -1) {

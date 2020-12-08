@@ -5,7 +5,7 @@
 #include<sys/ipc.h>
 #include<sys/shm.h>
 
-#define MY_MSG_SIZE 64
+#define MY_MSG_SIZE 1000
 
 key_t shmkey;
 int   shmid;
