@@ -17,7 +17,6 @@ key_t shmkey;
 int   shmid;
 char  *shared_data;
 
-
 void sgnhandle(int signal)
 {
 	printf("\n[Serwer]: dostalem SIGINT => koncze i sprzatam...");
@@ -26,30 +25,26 @@ void sgnhandle(int signal)
 			(shmctl(shmid, IPC_RMID, 0) == 0)?"OK":"blad shmctl");
 	exit(0);
 }
-
-void rec(int signal)
+void wypisz(int signal)
 {
-	printf("\nbajojajo");
+	printf("\ntest\n");
 }
 
-int main(int argc, char * argv[]) 
+int main(int argc, char * argv[])
 {
-
-    /*if (argc != 2)
-    {
+	struct shmid_ds buf;
+	
+	if (argc != 2)
+    	{
         perror("Nieprawidlowa ilosc argumentow");
         return 1;
-    }
-	*/
-
-	struct shmid_ds buf;
-
-	signal(SIGTSTP, rec);
-	signal(SIGINT, sgnhandle);
+    	}
 	
+	signal(SIGINT, sgnhandle);
+	signal(SIGTSTP, wypisz);
 
 	printf("[Serwer]: tworze klucz...");
-    if( (shmkey = ftok(argv[1], 1)) == -1) {
+    	if( (shmkey = ftok(argv[0], 1)) == -1) {
 	    printf("Blad tworzenia klucza!\n");
 		exit(1);
 	}
@@ -77,11 +72,8 @@ int main(int argc, char * argv[])
 	printf("[Serwer]: zawartosc pamieci wspolnej:\n");
 
 	while(8) {	
-		printf("\33[2K\r%s", shared_data);
-		fflush(stdout); /* trik by nadpisywanie sie udalo */
+		fflush(stdout);
 		sleep(1);
 	}
-	
-	return 0;
-
 }
+
