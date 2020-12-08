@@ -27,7 +27,7 @@ void sgnhandle(int signal)
 	exit(0);
 }
 
-void printRecords(int signal)
+void rec(int signal)
 {
 	printf("\nbajojajo");
 }
@@ -44,7 +44,7 @@ int main(int argc, char * argv[])
 
 	struct shmid_ds buf;
 
-	signal(SIGTSTP, sgnhandle);
+	signal(SIGTSTP, rec);
 	signal(SIGINT, sgnhandle);
 	
 
