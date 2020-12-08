@@ -25,7 +25,8 @@ void sgnhandle(int signal)
 			(shmctl(shmid, IPC_RMID, 0) == 0)?"OK":"blad shmctl");
 	exit(0);
 }
-void wypisz(int signal)
+
+void printRecords(int signal)
 {
 	printf("\ntest\n");
 }
@@ -41,7 +42,7 @@ int main(int argc, char * argv[])
     	}
 	
 	signal(SIGINT, sgnhandle);
-	signal(SIGTSTP, wypisz);
+	signal(SIGTSTP, printRecords);
 
 	printf("[Serwer]: tworze klucz...");
     	if( (shmkey = ftok(argv[0], 1)) == -1) {
