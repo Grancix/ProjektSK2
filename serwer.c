@@ -36,9 +36,10 @@ void printRecords(int signal)
 	printf("\n[Serwer]: Ksiega skarg i wnioskow:");
 	printf("\n[Serwer]: Zajetych slotow: %d / %d\n", shared_data[0].counter, shared_data[0].n);
 
-	for(i = 0; i < shared_data[0].n; i++)
+	for(i = 0; i < shared_data[0].counter; i++)
 	{
-		printf("\n\33[2K\r%s\n", shared_data[i].record);
+		printf("\n%s", shared_data[i].record);
+		fflush(stdout);
 	}
 	
 	printf("\n[Serwer]: Koniec wspisow ksiegi");
