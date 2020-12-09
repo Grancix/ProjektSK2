@@ -30,7 +30,7 @@ void closeServer(int signal)
 }
 
 void printRecords(int signal)
-{}
+{
 	printf("\n[Serwer]: Ksiega skarg i wnioskow:");
 	printf("\n[Serwer]: Zajetych slotow: %d / %d\n", shared_data[0].counter, shared_data[0].n);
 
