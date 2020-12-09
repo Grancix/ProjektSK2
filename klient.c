@@ -55,7 +55,7 @@ int main(int argc, char * argv[]) {
 
 	printf("\n[Serwer]: Zajetych slotow: %d / %d\n", shared_data[0].counter, shared_data[0].n);
 
-	if(shared_data[0].counter < shared.data[0].n)
+	if(shared_data[0].counter < shared_data[0].n)
 	{
 		printf("[Klient]: Opisz swój problem:\n");
 		fgets(buf2, MY_MSG_SIZE, stdin);

@@ -84,7 +84,7 @@ int main(int argc, char * argv[])
 	shared_data[0].n = atoi(argv[1]);
 	shared_data[0].counter = 0;
 
-	printf("\n[Serwer]: Utworzono slotow: %d" shared_data[0].n);
+	printf("\n[Serwer]: Utworzono slotow: %d", shared_data[0].n);
 	printf("\n[Serwer]: Aby wyswieltlic wpisy do ksiegi, wcisnij CTRL + Z");
 	printf("\n[Serwer]: Aby zakonczyc prace serwera, wcisnij CTRL + C\n");
 
