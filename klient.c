@@ -59,6 +59,8 @@ int main(int argc, char * argv[]) {
 	/* wpisywanie do pamieci dzielonej */
 	buf[strlen(buf) - 1] = '\0'; /* techniczne: usuwam koniec linii */
 	strcpy(shared_data[0], buf);
+	strcpy(shared_data[1], buf);
+	strcpy(shared_data[2], buf);
 	
 	printf("[Klient]: wpisalem komunikat do pamieci wspolnej\n");
 

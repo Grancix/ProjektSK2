@@ -26,6 +26,9 @@ void closeServer(int signal)
 
 void printRecords(int signal)
 {
+	printf("\33[2K\r%s", shared_data[0]);
+	printf("\33[2K\r%s", shared_data[1]);
+	printf("\33[2K\r%s", shared_data[2]);
 	printf("\ntest\n");
 }
 
