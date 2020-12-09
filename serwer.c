@@ -38,11 +38,11 @@ void printRecords(int signal)
 
 	for(i = 0; i < shared_data[0].counter; i++)
 	{
-		printf("\n%s", shared_data[i].record);
+		printf("\n%s\n", shared_data[i].record);
 		fflush(stdout);
 	}
 	
-	printf("\n[Serwer]: Koniec wspisow ksiegi");
+	printf("\n[Serwer]: Koniec wpisow ksiegi");
 }
 
 int main(int argc, char * argv[])
@@ -84,6 +84,11 @@ int main(int argc, char * argv[])
 
 	shared_data[0].n = atoi(argv[1]);
 	shared_data[0].counter = 0;
+
+	sprintf(shared_data[0].record, "000");
+	sprintf(shared_data[1].record, "111");
+	printf("\n%s\n", shared_data[0].record);
+	printf("\n%s\n", shared_data[1].record);
 
 	printf("\n[Serwer]: Utworzono slotow: %d", shared_data[0].n);
 	printf("\n[Serwer]: Aby wyswieltlic wpisy do ksiegi, wcisnij CTRL + Z");
