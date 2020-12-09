@@ -29,9 +29,7 @@ void printRecords(int signal)
 }
 
 int main(int argc, char * argv[])
-{
-	struct shmid_ds buf;
-	
+{	
 	if (argc != 2)
     	{
         perror("Nieprawidlowa ilosc argumentow");
