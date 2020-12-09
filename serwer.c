@@ -77,12 +77,10 @@ int main(int argc, char * argv[])
 
 	shared_data[0] = '\0';
 
-	printf("\n[Serwer]: Aby wyswieltlic wpisy do ksiegi, wcisnij CTRL + Z\n");
+	printf("\n[Serwer]: Aby wyswieltlic wpisy do ksiegi, wcisnij CTRL + Z");
 	printf("\n[Serwer]: Aby zakonczyc prace serwera, wcisnij CTRL + C\n");
 
-	while(8) 
-	{	
+	for(;;) 
 		sleep(10);
-	}
 }
 
