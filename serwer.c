@@ -6,7 +6,8 @@
 #include<signal.h>
 #include<unistd.h>
 
-#define MY_MSG_SIZE 1000
+#define USR_REC_SIZE 1000
+#define USR_NAME_SIZE 50
 
 key_t shmkey;
 int shmid;
@@ -16,7 +17,8 @@ struct recordData
 {
 	int n;
 	int counter;
-	char record[MY_MSG_SIZE];
+	char record[USR_REC_SIZE];
+	char username[USR_NAME_SIZE];
 } *shared_data;
 
 void closeServer(int signal)
@@ -38,6 +40,7 @@ void printRecords(int signal)
 	for(i = 0; i < shared_data[0].counter; i++)
 	{
 		fflush(stdout);
+		printf("[%s]: ", shared_data[i].username);
 		printf("%s\n", shared_data[i].record);
 	}
 	

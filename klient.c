@@ -5,17 +5,19 @@
 #include<sys/ipc.h>
 #include<sys/shm.h>
 
-#define MY_MSG_SIZE 1000
+#define USR_REC_SIZE 1000
+#define USR_NAME_SIZE 50
 
 key_t shmkey;
 int shmid;
-char buf[MY_MSG_SIZE];
+char buf[USR_REC_SIZE];
 
 struct recordData
 {
 	int n;
 	int counter;
-	char record[MY_MSG_SIZE];
+	char record[USR_REC_SIZE];
+	char username[USR_NAME_SIZE];
 } *shared_data;
 
 int main(int argc, char * argv[]) {
@@ -60,10 +62,11 @@ int main(int argc, char * argv[]) {
 		i = shared_data[0].counter;
 
 		printf("[Klient]: Opisz swój problem:\n");
-		fgets(buf, MY_MSG_SIZE, stdin);
+		fgets(buf, USR_REC_SIZE, stdin);
 
 		buf[strlen(buf) - 1] = '\0';
 		strcpy(shared_data[i].record, buf);
+		strcpy(shared_data[i].username, argv[2]);
 		shared_data[0].counter++;
 		
 		printf("[Klient]: Komunikat zostal wpisany w slocie %d\n", i);
