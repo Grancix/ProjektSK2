@@ -15,7 +15,7 @@ int n;
 struct recordData
 {
 	int n;
-	int counter = 0;
+	int counter;
 	char record[MY_MSG_SIZE];
 } *shared_data;
 
@@ -72,6 +72,7 @@ int main(int argc, char * argv[])
 	}
 
 	shared_data[0].n = atoi(argv[1]);
+	shared_data[0].counter = 0;
 
 	printf("\n[Serwer]: Zajetych slotow: %d / %d\n", shared_data[0].counter, shared_data[0].n);
 	printf("\n[Serwer]: Aby wyswieltlic wpisy do ksiegi, wcisnij CTRL + Z");
