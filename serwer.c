@@ -38,10 +38,8 @@ void printRecords(int signal)
 	for(i = 0; i < shared_data[0].counter; i++)
 	{
 		fflush(stdout);
-		printf("%s", shared_data[i].record);
+		printf("%s\n", shared_data[i].record);
 	}
-	
-	printf("\n[Serwer]: Koniec wpisow ksiegi");
 }
 
 int main(int argc, char * argv[])
