@@ -104,14 +104,15 @@ int main(int argc, char * argv[])
     sb.sem_flg = 0;
 
 	printf("\n[Serwer]: Tworzenie semafora i jego inicjalizacja...");
-	if ((semid = semget(shmkey, 1, IPC_CREAT)) == -1)
+	if ((semid = semget(shmkey, 1, 0666 | IPC_CREAT)) == -1)
 	{
         printf("ERROR semget!\n");
         exit(1);
     }
 
 	arg.val = 1;
-	if (semctl(semid, 0, SETVAL, arg) == -1) {
+	if (semctl(semid, 0, SETVAL, arg) == -1)
+	{
         printf("ERROR semctl");
         exit(1);
     }
