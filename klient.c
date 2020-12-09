@@ -43,7 +43,7 @@ int main(int argc, char * argv[]) {
 		exit(1);
 	}
 
-	printf("\n[Klient]: dolaczam pamiec wspolna...");
+	printf("\n[Klient]: Dołączenie segmentu pamięci wspólnej");
 
 	shared_data = (struct recordData *) shmat(shmid, (void *)0, 0);
 
@@ -52,19 +52,26 @@ int main(int argc, char * argv[]) {
 		printf(" blad shmat!\n");
 		exit(1);
 	}
+
 	printf("\n[Serwer]: Zajetych slotow: %d / %d\n", shared_data[0].counter, shared_data[0].n);
-	printf("[Klient]: podaj komunikat ktory chcesz wpisac do pamieci wspolnej:\n");
-	fgets(buf2, MY_MSG_SIZE, stdin);
 
-	sprintf(buf, "[%s]: %s", argv[2], buf2);
-	
-	/* wpisywanie do pamieci dzielonej */
-	buf[strlen(buf) - 1] = '\0'; /* techniczne: usuwam koniec linii */
-	strcpy(shared_data[0].record, buf);
-	
-	printf("[Klient]: wpisalem komunikat do pamieci wspolnej\n");
+	if(shared_data[0].counter < shared.data[0].n)
+	{
+		printf("[Klient]: Opisz swój problem:\n");
+		fgets(buf2, MY_MSG_SIZE, stdin);
 
+		sprintf(buf, "[%s]: %s", argv[2], buf2);
+		buf[strlen(buf) - 1] = '\0';
+		strcpy(shared_data[shared_data[0].counter ++].record, buf);
+		
+		printf("[Klient]: Komunikat zostal wpisany\n");
+	}
+
+	else
+		printf("[Klient]: Brak wolnych slotow w ksiedze");
+	
 	shmdt(shared_data);
+	printf("[Klient]: Odlaczanie pamieci, konczenie pracy programu\n");
 
 	return 0;
 

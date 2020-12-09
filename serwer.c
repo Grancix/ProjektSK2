@@ -31,7 +31,17 @@ void closeServer(int signal)
 
 void printRecords(int signal)
 {
-	printf("\nKsiega skarg i wnioskow:\n");
+	int i;
+
+	printf("\n[Serwer]: Ksiega skarg i wnioskow:");
+	printf("\n[Serwer]: Zajetych slotow: %d / %d\n", shared_data[0].counter, shared_data[0].n);
+
+	for(i = 0; i < shared_data[0].counter; i++)
+	{
+		printf("\33[2K\r%s", shared_data[0].record);
+	}
+	
+	fflush(stdout);
 }
 
 int main(int argc, char * argv[])
@@ -39,7 +49,7 @@ int main(int argc, char * argv[])
 	if (argc != 2)
     {
         printf("Nieprawidlowa ilosc argumentow");
-        return 1;
+        exit(1);
     }
 
 	signal(SIGINT, closeServer);
@@ -74,16 +84,12 @@ int main(int argc, char * argv[])
 	shared_data[0].n = atoi(argv[1]);
 	shared_data[0].counter = 0;
 
-	printf("\n[Serwer]: Zajetych slotow: %d / %d\n", shared_data[0].counter, shared_data[0].n);
+	printf("\n[Serwer]: Utworzono slotow: %d" shared_data[0].n);
 	printf("\n[Serwer]: Aby wyswieltlic wpisy do ksiegi, wcisnij CTRL + Z");
 	printf("\n[Serwer]: Aby zakonczyc prace serwera, wcisnij CTRL + C\n");
 
 	for(;;) 
-	{
-		printf("\33[2K\r%s", shared_data[0].record);
-		fflush(stdout);
 		sleep(1);
-	}
 
 }
 
