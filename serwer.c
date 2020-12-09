@@ -92,13 +92,14 @@ int main(int argc, char * argv[])
 	sb.sem_num = 0;
     sb.sem_op = -1;
     sb.sem_flg = 0;
-	
+
 	printf("\n[Serwer]: Tworzenie semafora i otwieranie go...");
 	if ((semid = semget(shmkey, 1, IPC_CREAT)) == -1)
 	{
         printf("ERROR semget!\n");
         exit(1);
     }
+	semop(semid, &sb, 1);
 	printf("--%d--", semid);
 
 	shared_data[0].n = atoi(argv[1]);
