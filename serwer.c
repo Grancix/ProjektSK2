@@ -30,9 +30,7 @@ void closeServer(int signal)
 }
 
 void printRecords(int signal)
-{
-	int i;
-
+{}
 	printf("\n[Serwer]: Ksiega skarg i wnioskow:");
 	printf("\n[Serwer]: Zajetych slotow: %d / %d\n", shared_data[0].counter, shared_data[0].n);
 
@@ -87,7 +85,10 @@ int main(int argc, char * argv[])
 	printf("\n[Serwer]: Aby zakonczyc prace serwera, wcisnij CTRL + C\n");
 
 	for(;;) 
+	{
+		fflush(stdout);
 		sleep(1);
+	}
 
 }
 

@@ -68,7 +68,7 @@ int main(int argc, char * argv[]) {
 		strcpy(shared_data[i].record, buf);
 		shared_data[0].counter++;
 		
-		printf("[Klient]: Komunikat zostal wpisany w slocie %d%d\n", i, shared_data[0].counter);
+		printf("[Klient]: Komunikat zostal wpisany w slocie %d%d\n", i);
 	}
 
 	else
