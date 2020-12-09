@@ -21,6 +21,7 @@ struct recordData
 
 int main(int argc, char * argv[]) {
 
+	int i;
     if (argc != 3)
     {
         printf("Nieprawidlowa ilosc argumentow");
@@ -57,12 +58,14 @@ int main(int argc, char * argv[]) {
 
 	if(shared_data[0].counter < shared_data[0].n)
 	{
+		i = shared_data[0].counter;
+
 		printf("[Klient]: Opisz swój problem:\n");
 		fgets(buf2, MY_MSG_SIZE, stdin);
 
 		sprintf(buf, "[%s]: %s", argv[2], buf2);
-		buf[strlen(buf) - 1] = '\0';
-		strcpy(shared_data[shared_data[0].counter].record, buf);
+		//buf[strlen(buf) - 1] = '\0';
+		strcpy(shared_data[i].record, buf);
 		shared_data[0].counter++;
 		
 		printf("[Klient]: Komunikat zostal wpisany\n");
