@@ -14,7 +14,7 @@ char buf2[MY_MSG_SIZE];
 
 struct recordData
 {
-	int typ;
+	int n;
 	char record[MY_MSG_SIZE];
 } *shared_data;
 
@@ -51,7 +51,7 @@ int main(int argc, char * argv[]) {
 		printf(" blad shmat!\n");
 		exit(1);
 	}
-
+	printf("\n[Serwer]: Zajetych slotow: %d / %d\n", shared_data[0].counter, shared_data[0].n);
 	printf("[Klient]: podaj komunikat ktory chcesz wpisac do pamieci wspolnej:\n");
 	fgets(buf2, MY_MSG_SIZE, stdin);
 

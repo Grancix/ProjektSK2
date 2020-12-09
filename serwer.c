@@ -10,11 +10,12 @@
 
 key_t shmkey;
 int shmid;
-int counter;
+int n;
 
 struct recordData
 {
-	int typ;
+	int n;
+	int counter = 0;
 	char record[MY_MSG_SIZE];
 } *shared_data;
 
@@ -35,15 +36,11 @@ void printRecords(int signal)
 
 int main(int argc, char * argv[])
 {	
-	int n;
-
 	if (argc != 2)
     {
         printf("Nieprawidlowa ilosc argumentow");
         return 1;
     }
-	
-	n = atoi(argv[1]);
 
 	signal(SIGINT, closeServer);
 	signal(SIGTSTP, printRecords);
@@ -58,7 +55,7 @@ int main(int argc, char * argv[])
 
 	printf("\n[Serwer]: tworze segment pamieci wspolnej");
 
-	if( (shmid = shmget(shmkey, n * sizeof(struct recordData), 0600 | IPC_CREAT | IPC_EXCL)) == -1) 
+	if( (shmid = shmget(shmkey, atoi(argv[1]) * sizeof(struct recordData), 0600 | IPC_CREAT | IPC_EXCL)) == -1) 
 	{
 		printf(" blad shmget!\n");
 		exit(1);
@@ -74,14 +71,17 @@ int main(int argc, char * argv[])
 		exit(1);
 	}
 
+	shared_data[0].n = atoi(argv[1]);
+
+	printf("\n[Serwer]: Zajetych slotow: %d / %d\n", shared_data[0].counter, shared_data[0].n);
 	printf("\n[Serwer]: Aby wyswieltlic wpisy do ksiegi, wcisnij CTRL + Z");
 	printf("\n[Serwer]: Aby zakonczyc prace serwera, wcisnij CTRL + C\n");
 
 	for(;;) 
 	{
 		printf("\33[2K\r%s", shared_data[0].record);
-		fflush(stdout); /* trik by nadpisywanie sie udalo */
-		sleep(10);
+		fflush(stdout);
+		sleep(1);
 	}
 
 }
