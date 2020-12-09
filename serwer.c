@@ -38,9 +38,10 @@ void printRecords(int signal)
 
 	for(i = 0; i < shared_data[0].counter; i++)
 	{
-		printf("\33[2K\r%s", shared_data[0].record);
+		printf("\n\33[2K\r%s\n", shared_data[i].record);
 	}
 	
+	printf("\n[Serwer]: Koniec wspisow ksiegi");
 	fflush(stdout);
 }
 

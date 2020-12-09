@@ -62,7 +62,8 @@ int main(int argc, char * argv[]) {
 
 		sprintf(buf, "[%s]: %s", argv[2], buf2);
 		buf[strlen(buf) - 1] = '\0';
-		strcpy(shared_data[shared_data[0].counter ++].record, buf);
+		strcpy(shared_data[shared_data[0].counter].record, buf);
+		shared_data[0].counter++;
 		
 		printf("[Klient]: Komunikat zostal wpisany\n");
 	}
