@@ -16,6 +16,7 @@ key_t shmkey;
 int shmid;
 int semid;
 int n;
+struct sembuf sb;
 
 struct recordData
 {
@@ -88,8 +89,13 @@ int main(int argc, char * argv[])
 		exit(1);
 	}
 
+	sb.sem_num = 0;
+    sb.sem_op = -1;
+    sb.sem_flg = 0;
+	
 	printf("\n[Serwer]: Tworzenie semafora i otwieranie go...");
-	if ((semid = semget(shmkey, 1, 0)) == -1) {
+	if ((semid = semget(shmkey, 1, IPC_CREAT)) == -1)
+	{
         printf("ERROR semget!\n");
         exit(1);
     }
