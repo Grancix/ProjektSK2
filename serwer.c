@@ -6,7 +6,7 @@
 #include<signal.h>
 #include<unistd.h>
 
-#define MY_MSG_SIZE 1050
+#define MY_MSG_SIZE 1000
 
 key_t shmkey;
 int shmid;
@@ -38,7 +38,7 @@ void printRecords(int signal)
 	for(i = 0; i < shared_data[0].counter; i++)
 	{
 		fflush(stdout);
-		printf("\33[2K\r%s", shared_data[i].record);
+		printf("%s", shared_data[i].record);
 	}
 	
 	printf("\n[Serwer]: Koniec wpisow ksiegi");

@@ -9,8 +9,8 @@
 
 key_t shmkey;
 int shmid;
-char buf[MY_MSG_SIZE + 50];
-char buf2[MY_MSG_SIZE];
+char buf[MY_MSG_SIZE];
+char buf2[MY_MSG_SIZE - 50];
 
 struct recordData
 {
@@ -61,9 +61,9 @@ int main(int argc, char * argv[]) {
 		i = shared_data[0].counter;
 
 		printf("[Klient]: Opisz swój problem:\n");
-		fgets(buf2, MY_MSG_SIZE, stdin);
+		fgets(buf, MY_MSG_SIZE, stdin);
 
-		sprintf(buf, "[%s]: %s", argv[2], buf2);
+		/*sprintf(buf, "[%s]: %s", argv[2], buf2);*/
 		buf[strlen(buf) - 1] = '\0';
 		strcpy(shared_data[i].record, buf);
 		shared_data[0].counter++;
