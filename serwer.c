@@ -12,12 +12,6 @@
 key_t shmkey;
 int shmid;
 int semid;
-
-struct sembuf sb; 
-	sb.sem_num = 0;
-	sb.sem_op = -1;
-	sb.sem_flg = 0;
-
 int n;
 
 struct recordData
