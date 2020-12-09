@@ -76,7 +76,8 @@ int main(int argc, char * argv[]) {
 		printf("[Klient]: Brak wolnych slotow w ksiedze");
 	
 	printf("[Klient]: Odlaczanie pamieci, konczenie pracy programu\n");
-
+	shmdt(shared_data);
+	
 	return 0;
 
 }

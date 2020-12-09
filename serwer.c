@@ -11,6 +11,13 @@
 
 key_t shmkey;
 int shmid;
+int semid;
+
+struct sembuf sb; 
+	sb.sem_num = 0;
+	sb.sem_op = -1;
+	sb.sem_flg = 0;
+
 int n;
 
 struct recordData
@@ -44,7 +51,7 @@ void printRecords(int signal)
 		printf("%s\n", shared_data[i].record);
 	}
 	
-	printf("\n[Serwer]: Koniec wpisow ksiegi");
+	printf("\n");
 }
 
 int main(int argc, char * argv[])
@@ -58,36 +65,43 @@ int main(int argc, char * argv[])
 	signal(SIGINT, closeServer);
 	signal(SIGTSTP, printRecords);
 
-	printf("[Serwer]: tworze klucz na bazie nazwy serwera: %s", argv[0]);
+	printf("[Serwer]: Tworzenie klucza na bazie nazwy serwera: %s...", argv[0]);
 
     if( (shmkey = ftok(argv[0], 1)) == -1) 
 	{
-	    printf("Blad tworzenia klucza!\n");
+	    printf("ERROR ftok!\n");
 		exit(1);
 	}
 
-	printf("\n[Serwer]: tworze segment pamieci wspolnej");
+	printf("\n[Serwer]: Tworzenie pamieci wspolnej...");
 
 	if( (shmid = shmget(shmkey, atoi(argv[1]) * sizeof(struct recordData), 0600 | IPC_CREAT | IPC_EXCL)) == -1) 
 	{
-		printf(" blad shmget!\n");
+		printf("ERROR shmget!\n");
 		exit(1);
 	}
 	
-	printf("\n[Serwer]: dolaczam pamiec wspolna");
+	printf("\n[Serwer]: Dolaczanie pamieci wspolnej...");
 
 	shared_data = (struct recordData *) shmat(shmid, (void *)0, 0);
 
 	if(shared_data == (struct recordData *) - 1)
 	{
-		printf(" blad shmat!\n");
+		printf("ERROR shmat!\n");
 		exit(1);
 	}
+
+	printf("\n[Serwer]: Tworzenie semafora i otwieranie go...");
+	if ((semid = semget(shmkey, 1, 0)) == -1) {
+        printf("ERROR semget!\n");
+        exit(1);
+    }
+	printf("--%d--", semid);
 
 	shared_data[0].n = atoi(argv[1]);
 	shared_data[0].counter = 0;
 
-	printf("\n[Serwer]: Utworzono slotow: %d", shared_data[0].n);
+	printf("\n[Serwer]: Utworzono slotow na wpisy: %d", shared_data[0].n);
 	printf("\n[Serwer]: Aby wyswieltlic wpisy do ksiegi, wcisnij CTRL + Z");
 	printf("\n[Serwer]: Aby zakonczyc prace serwera, wcisnij CTRL + C\n");
 
@@ -96,5 +110,6 @@ int main(int argc, char * argv[])
 		sleep(1);
 	}
 
+	return 0;
 }
 
