@@ -31,11 +31,14 @@ void closeServer(int signal)
 
 void printRecords(int signal)
 {
+	fflush(stdout);
 	printf("\n[Serwer]: Ksiega skarg i wnioskow:");
 	printf("\n[Serwer]: Zajetych slotow: %d / %d\n", shared_data[0].counter, shared_data[0].n);
 
-		printf("\n%s\n%s\n", shared_data[0].record,  shared_data[1].record);
-		fflush(stdout);
+	for(i = 0; i < shared_data[0].counter; i++)
+	{
+		printf("\33[2K\r%s", shared_data[i].record);
+	}
 	
 	printf("\n[Serwer]: Koniec wpisow ksiegi");
 }
@@ -86,7 +89,6 @@ int main(int argc, char * argv[])
 
 	for(;;) 
 	{
-		fflush(stdout);
 		sleep(1);
 	}
 

@@ -64,7 +64,7 @@ int main(int argc, char * argv[]) {
 		fgets(buf2, MY_MSG_SIZE, stdin);
 
 		sprintf(buf, "[%s]: %s", argv[2], buf2);
-		//buf[strlen(buf) - 1] = '\0';
+		buf[strlen(buf) - 1] = '\0';
 		strcpy(shared_data[i].record, buf);
 		shared_data[0].counter++;
 		
