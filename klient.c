@@ -9,7 +9,7 @@
 
 key_t shmkey;
 int   shmid;
-char  **shared_data;
+char  *shared_data[1000];
 char  buf[MY_MSG_SIZE];
 
 
@@ -43,9 +43,9 @@ int main(int argc, char * argv[]) {
 	
 	printf("[Klient]: dolaczam pamiec wspolna...");
 
-	shared_data = (char **) shmat(shmid, (void **)0, 0);
+	shared_data = (char *) shmat(shmid, (void *)0, 0);
 
-	if(shared_data == (char **)-1)
+	if(shared_data == (char *)-1)
 	{
 		printf(" blad shmat!\n");
 		exit(1);

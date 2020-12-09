@@ -72,9 +72,9 @@ int main(int argc, char * argv[])
 	
 	printf("[Serwer]: dolaczam pamiec wspolna...");
 
-	shared_data = (char **) shmat(shmid, (void **)0, 0);
+	shared_data = (char *) shmat(shmid, (void *)0, 0);
 
-	if(shared_data == (char **)-1)
+	if(shared_data == (char *)-1)
 	{
 		printf(" blad shmat!\n");
 		exit(1);
