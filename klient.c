@@ -1,12 +1,13 @@
-#include<stdio.h>
-#include<stdlib.h>
-#include<string.h>
-#include<sys/types.h>
-#include<sys/ipc.h>
-#include<sys/shm.h>
-#include<sys/types.h>
-#include<sys/ipc.h>
-#include<sys/sem.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/types.h>
+#include <sys/ipc.h>
+#include <sys/shm.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/ipc.h>
+#include <sys/sem.h>
 
 #define USR_REC_SIZE 1000
 #define USR_NAME_SIZE 50

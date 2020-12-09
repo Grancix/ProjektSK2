@@ -1,10 +1,10 @@
-#include<stdio.h>
-#include<stdlib.h>
-#include<sys/types.h>
-#include<sys/shm.h>
-#include<sys/msg.h>
-#include<signal.h>
-#include<unistd.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/types.h>
+#include <sys/shm.h>
+#include <sys/msg.h>
+#include <signal.h>
+#include <unistd.h>
 #include <sys/types.h>
 #include <sys/ipc.h>
 #include <sys/sem.h>
@@ -26,12 +26,19 @@ struct recordData
 	char username[USR_NAME_SIZE];
 } *shared_data;
 
+union semun {
+    int val;
+    struct semid_ds *buf;
+    ushort *array;
+} arg;
+
 void closeServer(int signal)
 {
 	printf("\n[Serwer]: Usuwanie pamieci wspoldzielonej");
 	
 	shmdt(shared_data);
 	shmctl(shmid, IPC_RMID, 0);
+	semctl(semid, 0, IPC_RMID, arg);
 
 	exit(0);
 }
@@ -39,6 +46,8 @@ void closeServer(int signal)
 void printRecords(int signal)
 {	
 	int i;
+	printf("\n[Serwer]: Blokowanie semafora...");
+	semop(semid, &sb, 1);
 	printf("\n[Serwer]: Ksiega skarg i wnioskow:");
 	printf("\n[Serwer]: Zajetych slotow: %d / %d\n", shared_data[0].counter, shared_data[0].n);
 
@@ -49,7 +58,8 @@ void printRecords(int signal)
 		printf("%s\n", shared_data[i].record);
 	}
 	
-	printf("\n");
+	printf("\n[Serwer]: Odblokowanie semafora...");
+	semop(semid, &sb, 1);
 }
 
 int main(int argc, char * argv[])
@@ -93,14 +103,18 @@ int main(int argc, char * argv[])
     sb.sem_op = -1;
     sb.sem_flg = 0;
 
-	printf("\n[Serwer]: Tworzenie semafora i otwieranie go...");
+	printf("\n[Serwer]: Tworzenie semafora i jego inicjalizacja...");
 	if ((semid = semget(shmkey, 1, IPC_CREAT)) == -1)
 	{
         printf("ERROR semget!\n");
         exit(1);
     }
-	semop(semid, &sb, 1);
-	printf("--%d--", semid);
+
+	arg.val = 1;
+	if (semctl(semid, 0, SETVAL, arg) == -1) {
+        printf("ERROR semctl");
+        exit(1);
+    }
 
 	shared_data[0].n = atoi(argv[1]);
 	shared_data[0].counter = 0;
