@@ -5,6 +5,9 @@
 #include<sys/msg.h>
 #include<signal.h>
 #include<unistd.h>
+#include <sys/types.h>
+#include <sys/ipc.h>
+#include <sys/sem.h>
 
 #define USR_REC_SIZE 1000
 #define USR_NAME_SIZE 50
