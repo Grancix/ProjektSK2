@@ -51,7 +51,7 @@ int main(int argc, char * argv[]) {
 		exit(1);
 	}
 
-	printf("\n[Klient]: Dołączenie segmentu pamięci wspolnej");
+	printf("\n[Klient]: Dołączenie segmentu pamięci wspolnej, laczenie z semaforem, prosze czekac...");
 
 	shared_data = (struct recordData *) shmat(shmid, (void *)0, 0);
 
@@ -60,8 +60,6 @@ int main(int argc, char * argv[]) {
 		printf(" blad shmat!\n");
 		exit(1);
 	}
-
-	printf("\n[Klient]: Laczenie z semaforem, proba blokowania...");
 
 	if ((semid = semget(shmkey, 1, 0)) == -1)
 	{
@@ -72,9 +70,10 @@ int main(int argc, char * argv[]) {
 	sb.sem_num = 0;
     sb.sem_op = -1;
     sb.sem_flg = 0;
-	
+
 	semop(semid, &sb, 1);
-	printf("\n[Serwer]: Zajetych slotow wpisow: %d / %d\n", shared_data[0].counter, shared_data[0].n);
+	printf("\n[Klient]: Polaczenie udane!");
+	printf("\n[Klient]:" Zajetych slotow wpisow: %d / %d\n", shared_data[0].counter, shared_data[0].n);
 
 	if(shared_data[0].counter < shared_data[0].n)
 	{
