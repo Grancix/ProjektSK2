@@ -42,7 +42,6 @@ void printRecords(int signal)
 	}
 	
 	printf("\n[Serwer]: Koniec wspisow ksiegi");
-	fflush(stdout);
 }
 
 int main(int argc, char * argv[])
