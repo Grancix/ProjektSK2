@@ -15,11 +15,10 @@ char  *shared_data;
 
 void closeServer(int signal)
 {
-	printf("\n[Serwer]: Konczenie pracy, czyszczenie pamieci");
-
-	printf(" (odlaczenie: %s, usuniecie: %s)\n", 
-			(shmdt(shared_data) == 0)        ?"OK":"blad shmdt",
-			(shmctl(shmid, IPC_RMID, 0) == 0)?"OK":"blad shmctl");
+	printf("\n[Serwer]: Usuwanie pamieci wspoldzielonej");
+	
+	shmdt(shared_data);
+	shmctl(shmid, IPC_RMID, 0;
 
 	exit(0);
 }
@@ -50,20 +49,15 @@ int main(int argc, char * argv[])
 		exit(1);
 	}
 
-	printf(" OK (klucz: %d)\n", shmkey);
-
-	printf("[Serwer]: tworze segment pamieci wspolnej...");
+	printf("\n[Serwer]: tworze segment pamieci wspolnej");
 
 	if( (shmid = shmget(shmkey, MY_MSG_SIZE * sizeof(char), 0600 | IPC_CREAT | IPC_EXCL)) == -1) 
 	{
 		printf(" blad shmget!\n");
 		exit(1);
 	}
-
-	shmctl(shmid, IPC_STAT, &buf);
-	printf(" OK (id: %d, rozmiar: %zub)\n", shmid, buf.shm_segsz);
 	
-	printf("[Serwer]: dolaczam pamiec wspolna...");
+	printf("\n[Serwer]: dolaczam pamiec wspolna");
 
 	shared_data = (char *) shmat(shmid, (void *)0, 0);
 
@@ -73,14 +67,17 @@ int main(int argc, char * argv[])
 		exit(1);
 	}
 
-	printf(" OK (adres: %lX)\n", (long int)shared_data);
-
 	shared_data[0] = '\0';
 
 	printf("\n[Serwer]: Aby wyswieltlic wpisy do ksiegi, wcisnij CTRL + Z");
 	printf("\n[Serwer]: Aby zakonczyc prace serwera, wcisnij CTRL + C\n");
 
 	for(;;) 
+	{
+		printf("\33[2K\r%s", shared_data);
+		fflush(stdout); /* trik by nadpisywanie sie udalo */
 		sleep(10);
+	}
+
 }
 

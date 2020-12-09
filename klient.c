@@ -8,9 +8,10 @@
 #define MY_MSG_SIZE 1000
 
 key_t shmkey;
-int   shmid;
-char  *shared_data;
-char  buf[MY_MSG_SIZE];
+int shmid;
+char *shared_data;
+char buf[MY_MSG_SIZE];
+char buf2[MY_MSG_SIZE];
 
 
 int main(int argc, char * argv[]) {
@@ -18,7 +19,7 @@ int main(int argc, char * argv[]) {
     if (argc != 3)
     {
         perror("Nieprawidlowa ilosc argumentow");
-        return 1;
+        exit(1);
     }
 
 	printf("[Klient]: Tworzenie klucza na bazie podanego pliku \"%s\"", argv[1]);
@@ -29,9 +30,7 @@ int main(int argc, char * argv[]) {
 		exit(1);
 	}
 
-	printf(" OK (klucz:  %d)\n", shmkey);
-
-	printf("[Klient]: otwieram segment pamieci wspolnej...");
+	printf("[Klient]: otwieram segment pamieci wspolnej");
 
 	if( (shmid = shmget(shmkey, 0, 0)) == -1 )
 	{
@@ -39,8 +38,6 @@ int main(int argc, char * argv[]) {
 		exit(1);
 	}
 
-	printf(" OK (id: %d)\n", shmid);
-	
 	printf("[Klient]: dolaczam pamiec wspolna...");
 
 	shared_data = (char *) shmat(shmid, (void *)0, 0);
@@ -50,11 +47,11 @@ int main(int argc, char * argv[]) {
 		printf(" blad shmat!\n");
 		exit(1);
 	}
-	
-	printf(" OK (adres: %lX)\n", (long int)shared_data);
 
 	printf("[Klient]: podaj komunikat ktory chcesz wpisac do pamieci wspolnej:\n");
-	fgets(buf, MY_MSG_SIZE, stdin);
+	fgets(buf2, MY_MSG_SIZE, stdin);
+
+	sprintf(buf, "[%s]: %s", argv[2], buf2);
 	
 	/* wpisywanie do pamieci dzielonej */
 	buf[strlen(buf) - 1] = '\0'; /* techniczne: usuwam koniec linii */
