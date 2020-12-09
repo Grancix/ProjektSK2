@@ -16,7 +16,7 @@ struct recordData
 {
 	int typ;
 	char record[MY_MSG_SIZE];
-} *shared data;
+} *shared_data;
 
 int main(int argc, char * argv[]) {
 
