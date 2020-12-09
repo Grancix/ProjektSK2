@@ -1,10 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <sys/types.h>
-#include <sys/ipc.h>
-#include <sys/shm.h>
 #include <unistd.h>
+
+#include <sys/shm.h>
 #include <sys/types.h>
 #include <sys/ipc.h>
 #include <sys/sem.h>
@@ -39,7 +38,7 @@ int main(int argc, char * argv[]) {
 
 	if( (shmkey = ftok(argv[1], 1)) == -1)
 	{
-		printf("Blad tworzenia klucza!\n");
+		printf("\n[ERROR]: ftok!\n");
 		exit(1);
 	}
 
@@ -47,23 +46,24 @@ int main(int argc, char * argv[]) {
 
 	if( (shmid = shmget(shmkey, 0, 0)) == -1 )
 	{
-		printf(" blad shmget\n");
+		printf("\n[ERROR]: shmget\n");
 		exit(1);
 	}
 
-	printf("\n[Klient]: Dołączenie segmentu pamięci wspolnej, laczenie z semaforem, prosze czekac...");
+	printf("\n[Klient]: Dolaczenie segmentu pamięci wspolnej");
 
 	shared_data = (struct recordData *) shmat(shmid, (void *)0, 0);
 
 	if(shared_data == (struct recordData *) - 1)
 	{
-		printf(" blad shmat!\n");
+		printf("\n[ERROR]: shmat!\n");
 		exit(1);
 	}
 
+	printf("\n[Klient]: Laczenie z semaforem, proba odblokowania...");
 	if ((semid = semget(shmkey, 1, 0)) == -1)
 	{
-        printf("ERROR semget");
+        printf("\n[ERROR]: semget");
         exit(1);
     }
 
@@ -71,7 +71,9 @@ int main(int argc, char * argv[]) {
     sb.sem_op = -1;
     sb.sem_flg = 0;
 
+	printf("\n[Klient]: Prosze czekac...\n");
 	semop(semid, &sb, 1);
+	
 	printf("\n[Klient]: Polaczenie udane!");
 	printf("\n[Klient]: Zajetych slotow wpisow: %d / %d\n", shared_data[0].counter, shared_data[0].n);
 
@@ -91,7 +93,7 @@ int main(int argc, char * argv[]) {
 	}
 
 	else
-		printf("[Klient]: Brak wolnych slotow w ksiedze");
+		printf("[Klient]: Brak wolnych slotow w ksiedze\n");
 	
 	printf("[Klient]: Odlaczanie pamieci, odblokowanie semafora, konczenie pracy programu\n");
 
