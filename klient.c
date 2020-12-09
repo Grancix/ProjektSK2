@@ -73,7 +73,7 @@ int main(int argc, char * argv[]) {
 
 	semop(semid, &sb, 1);
 	printf("\n[Klient]: Polaczenie udane!");
-	printf("\n[Klient]:" Zajetych slotow wpisow: %d / %d\n", shared_data[0].counter, shared_data[0].n);
+	printf("\n[Klient]: Zajetych slotow wpisow: %d / %d\n", shared_data[0].counter, shared_data[0].n);
 
 	if(shared_data[0].counter < shared_data[0].n)
 	{
