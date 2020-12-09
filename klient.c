@@ -10,7 +10,7 @@
 key_t shmkey;
 int shmid;
 char *shared_data;
-char buf[MY_MSG_SIZE];
+char buf[MY_MSG_SIZE + 50];
 char buf2[MY_MSG_SIZE];
 
 

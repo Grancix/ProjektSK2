@@ -18,7 +18,7 @@ void closeServer(int signal)
 	printf("\n[Serwer]: Usuwanie pamieci wspoldzielonej");
 	
 	shmdt(shared_data);
-	shmctl(shmid, IPC_RMID, 0;
+	shmctl(shmid, IPC_RMID, 0);
 
 	exit(0);
 }
