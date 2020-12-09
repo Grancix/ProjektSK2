@@ -63,7 +63,7 @@ int main(int argc, char * argv[]) {
 		printf("[Klient]: Opisz swój problem:\n");
 		fgets(buf, MY_MSG_SIZE, stdin);
 
-		sprintf(buf, "[%s]: %s", argv[2], buf2);*/
+		sprintf(buf, "[%s]: %s", argv[2], buf2);
 		buf[strlen(buf) - 1] = '\0';
 		strcpy(shared_data[i].record, buf2);
 		shared_data[0].counter++;
