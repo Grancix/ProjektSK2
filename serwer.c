@@ -42,9 +42,6 @@ int main(int argc, char * argv[])
 	
 	n = atoi(argv[1]);
 	printf("%d", n);
-	
-	signal(SIGINT, closeServer);
-	signal(SIGTSTP, printRecords);
 
 	printf("[Serwer]: tworze klucz na bazie nazwy serwera: %s", argv[0]);
 
@@ -82,6 +79,9 @@ int main(int argc, char * argv[])
 	shared_data[0] = '\0';
 
 	printf("[Serwer]: CTRL + Z wyswietla ksiege, CTRL + C zamyka serwer");
+
+	signal(SIGINT, closeServer);
+	signal(SIGTSTP, printRecords);
 
 	for(;;) 
 		sleep(10);
