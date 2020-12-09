@@ -58,7 +58,7 @@ int main(int argc, char * argv[])
 
 	printf("[Serwer]: tworze segment pamieci wspolnej...");
 
-	if( (shmid = shmget(shmkey, n * MY_MSG_SIZE, 0600 | IPC_CREAT | IPC_EXCL)) == -1) 
+	if( (shmid = shmget(shmkey, MY_MSG_SIZE * sizeof(char), 0600 | IPC_CREAT | IPC_EXCL)) == -1) 
 	{
 		printf(" blad shmget!\n");
 		exit(1);
