@@ -15,6 +15,7 @@ char buf2[MY_MSG_SIZE];
 struct recordData
 {
 	int n;
+	int counter = 0;
 	char record[MY_MSG_SIZE];
 } *shared_data;
 
