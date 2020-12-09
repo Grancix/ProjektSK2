@@ -11,7 +11,7 @@
 key_t shmkey;
 int shmid;
 int counter;
-char  *shared_data[1000];
+char  *shared_data;
 
 void closeServer(int signal)
 {
@@ -26,28 +26,21 @@ void closeServer(int signal)
 
 void printRecords(int signal)
 {
-	printf("\33[2K\r%s", shared_data[0]);
-	printf("\33[2K\r%s", shared_data[1]);
-	printf("\33[2K\r%s", shared_data[2]);
 	printf("\ntest\n");
 }
 
 int main(int argc, char * argv[])
 {
-	int n;
 	struct shmid_ds buf;
 	
 	if (argc != 2)
     	{
         perror("Nieprawidlowa ilosc argumentow");
-        exit(1);
+        return 1;
     	}
 	
 	signal(SIGINT, closeServer);
 	signal(SIGTSTP, printRecords);
-
-	n = atoi(argv[1]);
-	printf("%d", n);
 
 	printf("[Serwer]: tworze klucz na bazie nazwy serwera: %s", argv[0]);
 
@@ -61,7 +54,7 @@ int main(int argc, char * argv[])
 
 	printf("[Serwer]: tworze segment pamieci wspolnej...");
 
-	if( (shmid = shmget(shmkey, n * sizeof(*shared_data[1000]), 0600 | IPC_CREAT | IPC_EXCL)) == -1) 
+	if( (shmid = shmget(shmkey, MY_MSG_SIZE * sizeof(char), 0600 | IPC_CREAT | IPC_EXCL)) == -1) 
 	{
 		printf(" blad shmget!\n");
 		exit(1);
@@ -84,8 +77,12 @@ int main(int argc, char * argv[])
 
 	shared_data[0] = '\0';
 
-	printf("\n[Serwer]: CTRL + Z wyswietla ksiege, CTRL + C zamyka serwer");
+	printf("\n[Serwer]: Aby wyswieltlic wpisy do ksiegi, wcisnij CTRL + Z\n");
+	printf("\n[Serwer]: Aby zakonczyc prace serwera, wcisnij CTRL + C\n");
 
-	for(;;) 
+	while(8) 
+	{	
 		sleep(10);
+	}
 }
+

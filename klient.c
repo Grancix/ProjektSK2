@@ -9,7 +9,7 @@
 
 key_t shmkey;
 int   shmid;
-char  *shared_data[1000];
+char  *shared_data;
 char  buf[MY_MSG_SIZE];
 
 
@@ -58,9 +58,7 @@ int main(int argc, char * argv[]) {
 	
 	/* wpisywanie do pamieci dzielonej */
 	buf[strlen(buf) - 1] = '\0'; /* techniczne: usuwam koniec linii */
-	strcpy(shared_data[0], buf);
-	strcpy(shared_data[1], buf);
-	strcpy(shared_data[2], buf);
+	strcpy(shared_data, buf);
 	
 	printf("[Klient]: wpisalem komunikat do pamieci wspolnej\n");
 
