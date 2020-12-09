@@ -47,7 +47,10 @@ void printRecords(int signal)
 {	
 	int i;
 	printf("\n[Serwer]: Blokowanie semafora...");
+
+	sb.sem_op = -1;
 	semop(semid, &sb, 1);
+
 	printf("\n[Serwer]: Ksiega skarg i wnioskow:");
 	printf("\n[Serwer]: Zajetych slotow: %d / %d\n", shared_data[0].counter, shared_data[0].n);
 
@@ -59,6 +62,8 @@ void printRecords(int signal)
 	}
 	
 	printf("\n[Serwer]: Odblokowanie semafora...");
+
+	sb.sem_op = 1;
 	semop(semid, &sb, 1);
 }
 
@@ -131,4 +136,3 @@ int main(int argc, char * argv[])
 
 	return 0;
 }
-

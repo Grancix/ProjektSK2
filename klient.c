@@ -14,7 +14,9 @@
 
 key_t shmkey;
 int shmid;
+int semid;
 char buf[USR_REC_SIZE];
+struct sembuf sb;
 
 struct recordData
 {
@@ -33,7 +35,7 @@ int main(int argc, char * argv[]) {
         exit(1);
     }
 
-	printf("\n[Klient]: Tworzenie klucza na bazie podanego pliku \"%s\"", argv[1]);
+	printf("\n[Klient]: Tworzenie klucza na bazie podanego pliku \"%s\"...", argv[1]);
 
 	if( (shmkey = ftok(argv[1], 1)) == -1)
 	{
@@ -41,7 +43,7 @@ int main(int argc, char * argv[]) {
 		exit(1);
 	}
 
-	printf("\n[Klient]: otwieram segment pamieci wspolnej");
+	printf("\n[Klient]: otwieram segment pamieci wspolnej...");
 
 	if( (shmid = shmget(shmkey, 0, 0)) == -1 )
 	{
@@ -49,7 +51,7 @@ int main(int argc, char * argv[]) {
 		exit(1);
 	}
 
-	printf("\n[Klient]: Dołączenie segmentu pamięci wspólnej");
+	printf("\n[Klient]: Dołączenie segmentu pamięci wspolnej");
 
 	shared_data = (struct recordData *) shmat(shmid, (void *)0, 0);
 
@@ -59,7 +61,20 @@ int main(int argc, char * argv[]) {
 		exit(1);
 	}
 
-	printf("\n[Serwer]: Zajetych slotow: %d / %d\n", shared_data[0].counter, shared_data[0].n);
+	printf("\n[Klient]: Laczenie z semaforem, proba blokowania...");
+
+	if ((semid = semget(shmkey, 1, 0)) == -1)
+	{
+        printf("ERROR semget");
+        exit(1);
+    }
+
+	sb.sem_num = 0;
+    sb.sem_op = -1;
+    sb.sem_flg = 0;
+	
+	semop(semid, &sb, 1);
+	printf("\n[Serwer]: Zajetych slotow wpisow: %d / %d\n", shared_data[0].counter, shared_data[0].n);
 
 	if(shared_data[0].counter < shared_data[0].n)
 	{
@@ -79,7 +94,10 @@ int main(int argc, char * argv[]) {
 	else
 		printf("[Klient]: Brak wolnych slotow w ksiedze");
 	
-	printf("[Klient]: Odlaczanie pamieci, konczenie pracy programu\n");
+	printf("[Klient]: Odlaczanie pamieci, odblokowanie semafora, konczenie pracy programu\n");
+
+	sb.sem_op = 1;
+	semop(semid, &sb, 1);
 	shmdt(shared_data);
 	
 	return 0;
