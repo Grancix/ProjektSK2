@@ -6,12 +6,17 @@
 #include<signal.h>
 #include<unistd.h>
 
-#define MY_MSG_SIZE 1000
+#define MY_MSG_SIZE 1050
 
 key_t shmkey;
 int shmid;
 int counter;
-char  *shared_data;
+
+struct recordData
+{
+	int typ;
+	char record[MY_MSG_SIZE];
+} *shared data;
 
 void closeServer(int signal)
 {
@@ -25,17 +30,21 @@ void closeServer(int signal)
 
 void printRecords(int signal)
 {
-	printf("\ntest\n");
+	printf("\nKsiega skarg i wnioskow:\n");
 }
 
 int main(int argc, char * argv[])
 {	
+	int n;
+
 	if (argc != 2)
-    	{
-        perror("Nieprawidlowa ilosc argumentow");
+    {
+        printf("Nieprawidlowa ilosc argumentow");
         return 1;
-    	}
+    }
 	
+	n = atoi(argv[1]);
+
 	signal(SIGINT, closeServer);
 	signal(SIGTSTP, printRecords);
 
@@ -49,7 +58,7 @@ int main(int argc, char * argv[])
 
 	printf("\n[Serwer]: tworze segment pamieci wspolnej");
 
-	if( (shmid = shmget(shmkey, MY_MSG_SIZE * sizeof(char), 0600 | IPC_CREAT | IPC_EXCL)) == -1) 
+	if( (shmid = shmget(shmkey, n * sizeof(struct recordData), 0600 | IPC_CREAT | IPC_EXCL)) == -1) 
 	{
 		printf(" blad shmget!\n");
 		exit(1);
@@ -57,22 +66,20 @@ int main(int argc, char * argv[])
 	
 	printf("\n[Serwer]: dolaczam pamiec wspolna");
 
-	shared_data = (char *) shmat(shmid, (void *)0, 0);
+	shared_data = (struct recordData *) shmat(shmid, (void *)0, 0);
 
-	if(shared_data == (char *)-1)
+	if(shared_data == (struct recordData *) - 1)
 	{
 		printf(" blad shmat!\n");
 		exit(1);
 	}
-
-	shared_data[0] = '\0';
 
 	printf("\n[Serwer]: Aby wyswieltlic wpisy do ksiegi, wcisnij CTRL + Z");
 	printf("\n[Serwer]: Aby zakonczyc prace serwera, wcisnij CTRL + C\n");
 
 	for(;;) 
 	{
-		printf("\33[2K\r%s", shared_data);
+		printf("\33[2K\r%s", shared_data[0].record);
 		fflush(stdout); /* trik by nadpisywanie sie udalo */
 		sleep(10);
 	}

@@ -9,20 +9,24 @@
 
 key_t shmkey;
 int shmid;
-char *shared_data;
 char buf[MY_MSG_SIZE + 50];
 char buf2[MY_MSG_SIZE];
 
+struct recordData
+{
+	int typ;
+	char record[MY_MSG_SIZE];
+} *shared data;
 
 int main(int argc, char * argv[]) {
 
     if (argc != 3)
     {
-        perror("Nieprawidlowa ilosc argumentow");
+        printf("Nieprawidlowa ilosc argumentow");
         exit(1);
     }
 
-	printf("[Klient]: Tworzenie klucza na bazie podanego pliku \"%s\"", argv[1]);
+	printf("\n[Klient]: Tworzenie klucza na bazie podanego pliku \"%s\"", argv[1]);
 
 	if( (shmkey = ftok(argv[1], 1)) == -1)
 	{
@@ -30,7 +34,7 @@ int main(int argc, char * argv[]) {
 		exit(1);
 	}
 
-	printf("[Klient]: otwieram segment pamieci wspolnej");
+	printf("\n[Klient]: otwieram segment pamieci wspolnej");
 
 	if( (shmid = shmget(shmkey, 0, 0)) == -1 )
 	{
@@ -38,11 +42,11 @@ int main(int argc, char * argv[]) {
 		exit(1);
 	}
 
-	printf("[Klient]: dolaczam pamiec wspolna...");
+	printf("\n[Klient]: dolaczam pamiec wspolna...");
 
-	shared_data = (char *) shmat(shmid, (void *)0, 0);
+	shared_data = (struct recordData *) shmat(shmid, (void *)0, 0);
 
-	if(shared_data == (char *)-1)
+	if(shared_data == (struct recordData *) - 1)
 	{
 		printf(" blad shmat!\n");
 		exit(1);
@@ -55,7 +59,7 @@ int main(int argc, char * argv[]) {
 	
 	/* wpisywanie do pamieci dzielonej */
 	buf[strlen(buf) - 1] = '\0'; /* techniczne: usuwam koniec linii */
-	strcpy(shared_data, buf);
+	strcpy(shared_data[0].record, buf);
 	
 	printf("[Klient]: wpisalem komunikat do pamieci wspolnej\n");
 
