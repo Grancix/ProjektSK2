@@ -40,6 +40,8 @@ void printRecords(int signal)
 		fflush(stdout);
 		printf("%s\n", shared_data[i].record);
 	}
+	
+	printf("\n[Serwer]: Koniec wpisow ksiegi");
 }
 
 int main(int argc, char * argv[])
@@ -90,5 +92,6 @@ int main(int argc, char * argv[])
 	{
 		sleep(1);
 	}
+
 }
 
