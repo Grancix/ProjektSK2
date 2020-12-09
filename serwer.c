@@ -11,7 +11,7 @@
 key_t shmkey;
 int shmid;
 int counter;
-char  **shared_data;
+char  *shared_data[1000];
 
 void closeServer(int signal)
 {
@@ -40,9 +40,12 @@ int main(int argc, char * argv[])
 	if (argc != 2)
     	{
         perror("Nieprawidlowa ilosc argumentow");
-        return 1;
+        exit(1);
     	}
 	
+	signal(SIGINT, closeServer);
+	signal(SIGTSTP, printRecords);
+
 	n = atoi(argv[1]);
 	printf("%d", n);
 
@@ -58,7 +61,7 @@ int main(int argc, char * argv[])
 
 	printf("[Serwer]: tworze segment pamieci wspolnej...");
 
-	if( (shmid = shmget(shmkey, n * MY_MSG_SIZE * sizeof(char), 0600 | IPC_CREAT | IPC_EXCL)) == -1) 
+	if( (shmid = shmget(shmkey, n * sizeof(*shared_data[1000]), 0600 | IPC_CREAT | IPC_EXCL)) == -1) 
 	{
 		printf(" blad shmget!\n");
 		exit(1);
@@ -81,10 +84,7 @@ int main(int argc, char * argv[])
 
 	shared_data[0] = '\0';
 
-	printf("[Serwer]: CTRL + Z wyswietla ksiege, CTRL + C zamyka serwer");
-
-	signal(SIGINT, closeServer);
-	signal(SIGTSTP, printRecords);
+	printf("\n[Serwer]: CTRL + Z wyswietla ksiege, CTRL + C zamyka serwer");
 
 	for(;;) 
 		sleep(10);
